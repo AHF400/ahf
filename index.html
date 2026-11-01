@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AHF Inventario</title>
+<meta name="apple-mobile-web-app-title" content="AHF Inventario">
+<link rel="apple-touch-icon" href="icona-180.png">
+<link rel="icon" type="image/png" href="icona-512.png">
+<meta name="robots" content="noindex">
+<style>
+ body{margin:0;font-family:-apple-system,system-ui,sans-serif;background:#f4f1ea;color:#14644c;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:16px;box-sizing:border-box}
+ .c{max-width:420px;text-align:center}
+ img{width:120px;height:120px;border-radius:26px;box-shadow:0 6px 20px rgba(0,0,0,.15)}
+ h1{font-size:24px;margin:16px 0 6px}
+ p{font-size:16px;line-height:1.45;color:#2f5d4f}
+ .p{background:#fff;border-radius:16px;padding:14px 16px;text-align:left;margin:16px 0}
+ a.b{display:inline-block;background:#14644c;color:#fff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:999px;margin-top:6px}
+</style>
+</head>
+<body>
+<div class="c">
+ <img src="icona-512.png" alt="">
+ <h1>AHF Inventario</h1>
+ <div id="m"></div>
+</div>
+<script>
+// La chiave personale sta dopo il # (non viene mai inviata a questo sito). Con «go=1» si apre subito l'app.
+var EXEC = "https://script.google.com/macros/s/AKfycbwwbmUmLlI1DKvw42KLxt2nnHn8AowJxWOnNRG1vMEUgWmrqX62OvrhhRosBlt3-aI2AQ/exec";
+var q = new URLSearchParams(location.hash.slice(1)), t = (q.get('t') || '').replace(/[^\w-]/g, '');
+var m = document.getElementById('m');
+if (t && q.get('go') === '1') {
+  location.replace(EXEC + '?t=' + t);
+  m.innerHTML = '<p>Apro l\'inventario…</p>';
+} else if (t) {
+  history.replaceState(null, '', '#t=' + t + '&go=1');   // l'icona salvata aprirà direttamente l'app
+  m.innerHTML = '<div class="p"><p><b>Ultimo passo</b></p><p>1. Tocca <b>Condividi</b> (il quadrato con la freccia in basso).<br>2. Scegli <b>Aggiungi alla schermata Home</b>.<br>3. Tocca <b>Aggiungi</b>.</p><p>Da ora apri l\'inventario da quell\'icona: resti connesso finché non premi «Esci» nell\'app.</p></div><a class="b" href="' + EXEC + '?t=' + t + '">Apri l\'inventario adesso</a>';
+} else {
+  m.innerHTML = '<p>Per usare questa pagina apri l\'inventario, vai su <b>Profilo</b> e tocca <b>«Apri il collegamento personale»</b>.</p><a class="b" href="' + EXEC + '">Apri l\'inventario</a>';
+}
+</script>
+</body>
+</html>
