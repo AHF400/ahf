@@ -34,7 +34,10 @@ if (t && q.get('go') === '1') {
   m.innerHTML = '<p>Apro l\'inventario…</p>';
 } else if (t) {
   history.replaceState(null, '', '#t=' + t + '&go=1');   // l'icona salvata aprirà direttamente l'app
-  m.innerHTML = '<div class="p"><p><b>Ultimo passo</b></p><p>1. Tocca <b>Condividi</b> (il quadrato con la freccia in basso).<br>2. Scegli <b>Aggiungi alla schermata Home</b>.<br>3. Tocca <b>Aggiungi</b>.</p><p>Da ora apri l\'inventario da quell\'icona: resti connesso finché non premi «Esci» nell\'app.</p></div><a class="b" href="' + EXEC + '?t=' + t + '">Apri l\'inventario adesso</a>';
+  var passi = /Android/i.test(navigator.userAgent)
+    ? '1. Tocca i <b>tre puntini ⋮</b> in alto a destra.<br>2. Scegli <b>Aggiungi a schermata Home</b>.<br>3. Conferma con <b>Aggiungi</b> o <b>Installa</b> (se te lo chiede, scegli <b>Crea collegamento</b>).'
+    : '1. Tocca <b>Condividi</b>, il quadrato con la freccia (se non lo vedi, tocca prima i tre puntini).<br>2. Scegli <b>Aggiungi alla schermata Home</b>.<br>3. Tocca <b>Aggiungi</b>.';
+  m.innerHTML = '<div class="p"><p><b>Ultimo passo</b></p><p>' + passi + '</p><p>Da ora apri l\'inventario da quell\'icona: resti connesso finché non premi «Esci» nell\'app.</p></div><a class="b" href="' + EXEC + '?t=' + t + '">Apri l\'inventario adesso</a>';
 } else {
   m.innerHTML = '<p>Per usare questa pagina apri l\'inventario, vai su <b>Profilo</b> e tocca <b>«Apri il collegamento personale»</b>.</p><a class="b" href="' + EXEC + '">Apri l\'inventario</a>';
 }
