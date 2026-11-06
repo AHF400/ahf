@@ -24,7 +24,8 @@
  html.app body{background:linear-gradient(90deg,#145c4a,#1f7a63)}
  html.app #m{color:#fff}
  html.app #m p{color:#fff}
- iframe{position:absolute;left:0;right:0;top:env(safe-area-inset-top);bottom:0;width:100%;height:calc(100% - env(safe-area-inset-top));border:0;background:#f2f7f5}
+ /* 36 px in più: l'effetto di iOS 26 scende sotto l'ora, misurato su iPhone il 06/11 */
+ iframe{--alto:calc(env(safe-area-inset-top) + 36px);position:absolute;left:0;right:0;top:var(--alto);bottom:0;width:100%;height:calc(100% - var(--alto));border:0;background:#f2f7f5}
 </style>
 </head>
 <body>
