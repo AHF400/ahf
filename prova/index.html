@@ -6,7 +6,6 @@
 <title>AHF Prova</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="AHF Prova">
 <meta name="theme-color" content="#14644c">
 <link rel="apple-touch-icon" href="../icona-180.png">
@@ -19,13 +18,14 @@
  #m>div{max-width:420px}
  p{font-size:16px;line-height:1.45;color:#2f5d4f}
  .p{background:#fff;border-radius:16px;padding:14px 16px;text-align:left}
- /* striscia dell'ora verde come la testata: l'effetto sfocato di iOS su un colore uniforme non si nota */
- html.app,html.app body{background:#145c4a}
- html.app body{background:linear-gradient(90deg,#145c4a,#1f7a63)}
- html.app #m{color:#fff}
- html.app #m p{color:#fff}
- /* 36 px in più: l'effetto di iOS 26 scende sotto l'ora, misurato su iPhone il 06/11 */
- iframe{--alto:calc(env(safe-area-inset-top) + 36px);position:absolute;left:0;right:0;top:var(--alto);bottom:0;width:100%;height:calc(100% - var(--alto));border:0;background:#f2f7f5}
+ /* iOS 26 sfuma la zona dell'ora e circa 35 punti sotto (WebKit bug 330085, nessun modo di spegnerla): lì sta solo la banda verde.
+    22 px + i 14 di margine della testata = logo appena sotto la sfumatura. */
+ #banda{position:fixed;top:0;left:0;right:0;z-index:2;height:calc(env(safe-area-inset-top) + 22px);background:linear-gradient(90deg,#145c4a,#1f7a63 85%,#27876e)}
+ #banda small{position:absolute;right:8px;bottom:2px;font-size:10px;color:#fff;opacity:.55}
+ /* a certi avvii iOS lascia una striscia vuota sotto la pagina (WebKit bug 313800): prende lo sfondo, uguale alla lista dell'app */
+ html.app,html.app body{background:#f2f7f5}
+ #quadro{position:fixed;left:0;right:0;top:calc(env(safe-area-inset-top) + 22px);bottom:0}
+ #quadro iframe{display:block;width:100%;height:100%;border:0}
 </style>
 </head>
 <body>
@@ -43,7 +43,14 @@ if (t && (q.get('go') === '1' || daIcona)) {
   var f = document.createElement('iframe');
   f.src = EXEC + '?f=1&t=' + t;
   f.allow = 'camera *; microphone *; clipboard-write *';
-  document.body.appendChild(f);
+  var quadro = document.createElement('div');
+  quadro.id = 'quadro';
+  quadro.appendChild(f);
+  document.body.appendChild(quadro);
+  var banda = document.createElement('div');
+  banda.id = 'banda';
+  banda.innerHTML = '<small>prova 4</small>';   // per riconoscere una copia vecchia in cache
+  document.body.appendChild(banda);
 } else if (t) {
   history.replaceState(null, '', '#t=' + t + '&go=1');   // l'icona salvata aprirà direttamente il riquadro
   m.innerHTML = '<div><h2>AHF Prova</h2><div class="p"><p>1. Tocca <b>Condividi</b>, il quadrato con la freccia (se non lo vedi, tocca prima i tre puntini).<br>2. Scegli <b>Aggiungi alla schermata Home</b>.<br>3. Controlla che <b>Apri come app web</b> sia acceso, poi tocca <b>Aggiungi</b>.</p><p>Poi apri la prova da quell\'icona.</p></div></div>';
