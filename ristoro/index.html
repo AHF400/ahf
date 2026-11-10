@@ -44,6 +44,16 @@ var daIcona = navigator.standalone === true || matchMedia('(display-mode: standa
 if (location.hash === '#go=1' || daIcona) {
   m.innerHTML = '<p>Apro il menù…</p>';
   document.documentElement.className = 'app';
+  window.addEventListener('message', function (ev) {      // l'app (nel riquadro) chiede / consegna la password: resta solo qui, su questo dispositivo
+    var h = ''; try { h = new URL(ev.origin).hostname; } catch (e) {}
+    var d = ev.data;
+    if (!/(^|\.)googleusercontent\.com$/.test(h) || !d || typeof d.k !== 'string' || !/^ske_pw_[a-z]*$/.test(d.k)) return;
+    try {
+      if (d.tipo === 'ske-pw?') ev.source.postMessage({ tipo: 'ske-pw', k: d.k, pw: localStorage.getItem(d.k) || '' }, ev.origin);
+      else if (d.tipo === 'ske-pw-salva' && d.pw) localStorage.setItem(d.k, String(d.pw));
+      else if (d.tipo === 'ske-pw-cancella') localStorage.removeItem(d.k);
+    } catch (e) {}
+  });
   var f = document.createElement('iframe');
   f.src = EXEC + '?f=1';
   f.allow = 'camera *; microphone *; clipboard-write *';
